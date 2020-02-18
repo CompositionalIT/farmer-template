@@ -3,7 +3,6 @@
         <Description>Farmer Template</Description>
         <Authors>Isaac Abraham</Authors>
         <PackageProjectUrl>https://github.com/Farmer/Farmer>template</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/Farmer/Farmer-template/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/Farmer/Farmer-template.git</RepositoryUrl>
         <PackageTags>template;fsharp;azure;arm</PackageTags>
         <NeutralLanguage>en-US</NeutralLanguage>

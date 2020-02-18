@@ -16,6 +16,7 @@
     "sourceName": "Farmer.Template",
     "symbols": {
         "ci": {
+            "description": "Choose how you want to deploy your Farmer template from a CI/CD perspective.",
             "type": "parameter",
             "datatype": "choice",
             "defaultValue": "none",
@@ -27,7 +28,12 @@
                 {
                     "choice": "devops",
                     "description": "add support for azure devops"
+                },
+                {
+                    "choice": "direct",
+                    "description": "add support for direct deployment through Farmer"
                 }
+
             ]
         },
         "azureSubscription" : {
@@ -83,12 +89,23 @@
         {
             "exclude": [
                 "**/.template.config/**/*",
-                ".ionide/**"
+                ".ionide/**",
+                "*.fs",
+                "*.yml"
             ],
             "modifiers": [
                 {
-                    "exclude": "azure-pipelines.yml",
-                    "condition": "ci != \"devops\""
+                    "include": "azure-pipelines.yml",
+                    "condition": "ci == \"devops\""
+                },
+                {
+                    "include": "Program.fs",
+                    "condition": "ci != \"direct\""
+                },
+                {
+                    "include": "ProgramDeploy.fs",
+                    "condition": "ci == \"direct\"",
+                    "rename": { "ProgramDeploy.fs" : "Program.fs" }
                 }
             ]
         }
