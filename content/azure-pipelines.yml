@@ -1,0 +1,19 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-2019'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Generate ARM template'
+  inputs:
+    command: 'run'
+
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Deploy generated ARM template'
+  inputs:
+    azureSubscription: '<enter subscription name here>'
+    resourceGroupName: <enter resource group name here>
+    location: <enter location here>
+    csmFile: <enter arm file here>
