@@ -15,14 +15,6 @@
     "shortName": "Farmer",
     "sourceName": "Farmer.Template",
     "symbols": {
-        "createdate": {
-            "type": "generated",
-            "generator": "now",
-            "parameters": {
-              "format": "yyyy-MM-dd"
-            },
-            "replaces":"1970-01-01"
-        },
         "ci": {
             "type": "parameter",
             "datatype": "choice",
@@ -37,506 +29,68 @@
                     "description": "add support for azure devops"
                 }
             ]
+        },
+        "azureSubscription" : {
+            "type": "parameter",
+            "datatype": "text",
+            "replaces":"<enter subscription name here>",
+            "isRequired": false,
+            "description": "The name of the subscription"
+        },
+        "resourceGroup" : {
+            "type": "parameter",
+            "datatype": "text",
+            "replaces":"farmer-rg",
+            "isRequired": false,
+            "description": "The name of the resource group in Azure."
+        },
+        "armTemplate" : {
+            "description": "The name of the ARM template JSON file.",
+            "type": "parameter",
+            "datatype": "text",
+            "replaces": "output",
+            "isRequired": false
+        },
+        "location" : {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                { "choice" : "EastAsia" },
+                { "choice" : "SoutheastAsia" },
+                { "choice" : "CentralUS" },
+                { "choice" : "EastUS" },
+                { "choice" : "EastUS2" },
+                { "choice" : "WestUS" },
+                { "choice" : "NorthCentralUS" },
+                { "choice" : "SouthCentralUS" },
+                { "choice" : "NorthEurope" },
+                { "choice" : "WestEurope" },
+                { "choice" : "JapanWest" },
+                { "choice" : "JapanEast" },
+                { "choice" : "BrazilSouth" },
+                { "choice" : "AustraliaEast" },
+                { "choice" : "AustraliaSoutheast" },
+                { "choice" : "SouthIndia" },
+                { "choice" : "CentralIndia" },
+                { "choice" : "WestIndia" }
+            ],
+            "description": "The location to create the resources in.",
+            "replaces": "NorthEurope",
+            "isRequired": false
         }
     },
     "sources": [
         {
-            "exclude": [ "**/.template.config/**/*", ".ionide/**" ],
+            "exclude": [
+                "**/.template.config/**/*",
+                ".ionide/**"
+            ],
             "modifiers": [
                 {
-                    "include": "paket_noazure_bridge-nofulma-nostreams_saturn-bridge-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-nofulma-nostreams_saturn-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-nofulma-streams_saturn-bridge-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-nofulma-streams_saturn-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-nofulma-nostreams_giraffe-bridge-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-nofulma-nostreams_giraffe-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-nofulma-streams_giraffe-bridge-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-nofulma-streams_giraffe-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-nofulma-nostreams_suave-bridge-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-nofulma-nostreams_suave-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-nofulma-streams_suave-bridge-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-nofulma-streams_suave-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-nostreams_saturn-remoting-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-nofulma-nostreams_saturn-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-streams_saturn-remoting-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-nofulma-streams_saturn-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-nostreams_giraffe-remoting-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-nofulma-nostreams_giraffe-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-streams_giraffe-remoting-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-nofulma-streams_giraffe-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-nostreams_suave-remoting-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-nofulma-nostreams_suave-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-nofulma-streams_suave-remoting-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-nofulma-streams_suave-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-nostreams_saturn-nocommunication-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-nostreams_saturn-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-streams_saturn-nocommunication-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-streams_saturn-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-nostreams_giraffe-nocommunication-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-nostreams_giraffe-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-streams_giraffe-nocommunication-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-streams_giraffe-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-nostreams_suave-nocommunication-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-nostreams_suave-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-nofulma-streams_suave-nocommunication-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy != \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-nofulma-streams_suave-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-nostreams_saturn-bridge-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-fulma-nostreams_saturn-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-streams_saturn-bridge-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-fulma-streams_saturn-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-nostreams_giraffe-bridge-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-fulma-nostreams_giraffe-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-streams_giraffe-bridge-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-fulma-streams_giraffe-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-nostreams_suave-bridge-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_bridge-fulma-nostreams_suave-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_bridge-fulma-streams_suave-bridge-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_bridge-fulma-streams_suave-bridge-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-nostreams_saturn-remoting-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-fulma-nostreams_saturn-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-streams_saturn-remoting-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-fulma-streams_saturn-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-nostreams_giraffe-remoting-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-fulma-nostreams_giraffe-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-streams_giraffe-remoting-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-fulma-streams_giraffe-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-nostreams_suave-remoting-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_remoting-fulma-nostreams_suave-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_remoting-fulma-streams_suave-remoting-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_remoting-fulma-streams_suave-remoting-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-nostreams_saturn-nocommunication-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-fulma-nostreams_saturn-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-streams_saturn-nocommunication-noazure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-fulma-streams_saturn-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-nostreams_giraffe-nocommunication-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-fulma-nostreams_giraffe-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-streams_giraffe-nocommunication-noazure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-fulma-streams_giraffe-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-nostreams_suave-nocommunication-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_noazure_nocommunication-fulma-nostreams_suave-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_noazure_nocommunication-fulma-streams_suave-nocommunication-noazure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy != \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_noazure_nocommunication-fulma-streams_suave-nocommunication-noazure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-nostreams_saturn-bridge-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-nofulma-nostreams_saturn-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-streams_saturn-bridge-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-nofulma-streams_saturn-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-nostreams_giraffe-bridge-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-nofulma-nostreams_giraffe-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-streams_giraffe-bridge-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-nofulma-streams_giraffe-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-nostreams_suave-bridge-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-nofulma-nostreams_suave-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-nofulma-streams_suave-bridge-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-nofulma-streams_suave-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-nostreams_saturn-remoting-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-nofulma-nostreams_saturn-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-streams_saturn-remoting-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-nofulma-streams_saturn-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-nostreams_giraffe-remoting-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-nofulma-nostreams_giraffe-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-streams_giraffe-remoting-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-nofulma-streams_giraffe-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-nostreams_suave-remoting-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-nofulma-nostreams_suave-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-nofulma-streams_suave-remoting-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-nofulma-streams_suave-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-nostreams_saturn-nocommunication-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-nofulma-nostreams_saturn-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-streams_saturn-nocommunication-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-nofulma-streams_saturn-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-nostreams_giraffe-nocommunication-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-nofulma-nostreams_giraffe-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-streams_giraffe-nocommunication-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-nofulma-streams_giraffe-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-nostreams_suave-nocommunication-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-nofulma-nostreams_suave-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-nofulma-streams_suave-nocommunication-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy == \"azure\" && layout == \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-nofulma-streams_suave-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-nostreams_saturn-bridge-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-fulma-nostreams_saturn-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-streams_saturn-bridge-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-fulma-streams_saturn-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-nostreams_giraffe-bridge-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-fulma-nostreams_giraffe-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-streams_giraffe-bridge-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-fulma-streams_giraffe-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-nostreams_suave-bridge-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_bridge-fulma-nostreams_suave-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_bridge-fulma-streams_suave-bridge-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == true && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_bridge-fulma-streams_suave-bridge-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-nostreams_saturn-remoting-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-fulma-nostreams_saturn-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-streams_saturn-remoting-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-fulma-streams_saturn-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-nostreams_giraffe-remoting-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-fulma-nostreams_giraffe-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-streams_giraffe-remoting-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-fulma-streams_giraffe-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-nostreams_suave-remoting-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_remoting-fulma-nostreams_suave-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_remoting-fulma-streams_suave-remoting-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == true && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_remoting-fulma-streams_suave-remoting-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-nostreams_saturn-nocommunication-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-fulma-nostreams_saturn-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-streams_saturn-nocommunication-azure.lock",
-                    "condition": "(server == \"saturn\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-fulma-streams_saturn-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-nostreams_giraffe-nocommunication-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-fulma-nostreams_giraffe-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-streams_giraffe-nocommunication-azure.lock",
-                    "condition": "(server == \"giraffe\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-fulma-streams_giraffe-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-nostreams_suave-nocommunication-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == false)",
-                    "rename": { "paket_azure_nocommunication-fulma-nostreams_suave-nocommunication-azure.lock": "paket.lock" }
-                },
-                {
-                    "include": "paket_azure_nocommunication-fulma-streams_suave-nocommunication-azure.lock",
-                    "condition": "(server == \"suave\" && remoting == false && bridge == false && deploy == \"azure\" && layout != \"none\" && streams == true)",
-                    "rename": { "paket_azure_nocommunication-fulma-streams_suave-nocommunication-azure.lock": "paket.lock" }
-                },
-
-
-
-
-                {
-                    "exclude": "**/ServerSuave.fs",
-                    "condition": "(server != \"suave\")"
-                },
-                {
-                    "rename": {
-                        "ServerSuave.fs": "Server.fs"
-                    }
-                },
-                {
-                    "exclude": "**/Suaveweb.config",
-                    "condition": "(server != \"suave\") || ((deploy != \"azure\") && (deploy != \"iis\"))"
-                },
-                {
-                    "rename": {
-                        "Suaveweb.config": "web.config"
-                    }
-                },
-                {
-                    "exclude": "**/SuaveAzure.fs",
-                    "condition": "(server != \"suave\") || (deploy != \"azure\")"
-                },
-                {
-                    "rename": {
-                        "SuaveAzure.fs": "Azure.fs"
-                    }
-                },
-                {
-                    "exclude": "**/ServerGiraffe.fs",
-                    "condition": "(server != \"giraffe\")"
-                },
-                {
-                    "rename": {
-                        "ServerGiraffe.fs": "Server.fs"
-                    }
-                },
-                {
-                    "exclude": "**/ServerSaturn.fs",
-                    "condition": "(server != \"saturn\")"
-                },
-                {
-                    "rename": {
-                        "ServerSaturn.fs": "Server.fs"
-                    }
-                },
-                {
-                    "exclude": "**/admin.css",
-                    "condition": "(layout != \"fulma-admin\")"
-                },
-                {
-                    "exclude": "**/hero.css",
-                    "condition": "(layout != \"fulma-hero\")"
-                },
-                {
-                    "exclude": "**/landing.css",
-                    "condition": "(layout != \"fulma-landing\")"
-                },
-                {
-                    "exclude": "**/login.css",
-                    "condition": "(layout != \"fulma-login\")"
-                },
-                {
-                    "exclude": "Dockerfile",
-                    "condition": "(deploy != \"docker\" && deploy != \"gcp-appengine\" && deploy != \"gcp-kubernetes\" )"
-                },
-                {
-                    "exclude": "app.yaml",
-                    "condition": "(deploy != \"gcp-appengine\" )"
-                },
-                {
-                    "exclude": "arm-template.json",
-                    "condition": "(deploy != \"azure\")"
-                },
-                {
-                    "exclude": "yarn.lock",
-                    "condition": "(js-deps != \"yarn\")"
-                },
-                {
-                    "exclude": "package-lock.json",
-                    "condition": "(js-deps != \"npm\")"
+                    "exclude": "azure-pipelines.yml",
+                    "condition": "ci != \"devops\""
                 }
             ]
         }
-    ],
-    "SpecialCustomOperations": {
-        "**/paket.*": {
-            "operations": [
-                {
-                    "type": "conditional",
-                    "configuration": {
-                        "if": [
-                            "#if"
-                        ],
-                        "else": [
-                            "#else"
-                        ],
-                        "elseif": [
-                            "#elseif"
-                        ],
-                        "endif": [
-                            "#endif"
-                        ],
-                        "trim": "true",
-                        "wholeLine": "true"
-                    }
-                }
-            ]
-        },
-        "**/*.fs*": {
-            "operations": [
-                {
-                    "type": "conditional",
-                    "configuration": {
-                        "if": [
-                            "#if"
-                        ],
-                        "else": [
-                            "#else"
-                        ],
-                        "elseif": [
-                            "#elseif"
-                        ],
-                        "endif": [
-                            "#endif"
-                        ],
-                        "trim": "true",
-                        "wholeLine": "true"
-                    }
-                }
-            ]
-        }
-    }
+    ]
 }
