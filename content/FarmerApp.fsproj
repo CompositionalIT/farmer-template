@@ -8,6 +8,6 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Farmer" Version="0.4.0" />
+    <PackageReference Include="Farmer" Version="*" />
   </ItemGroup>
 </Project>
