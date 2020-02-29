@@ -6,12 +6,12 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
-  displayName: 'Generate ARM template'
+  displayName: 'Run Farmer'
   inputs:
     command: 'run'
 
 - task: AzureResourceGroupDeployment@2
-  displayName: 'Deploy generated ARM template'
+  displayName: 'Deploy ARM template'
   inputs:
     azureSubscription: '<enter subscription name here>'
     resourceGroupName: farmer-rg

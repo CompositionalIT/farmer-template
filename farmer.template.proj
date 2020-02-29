@@ -10,6 +10,7 @@
         <NoBuild>true</NoBuild>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     </PropertyGroup>
     <PropertyGroup>
         <ExcludeFromPackage>

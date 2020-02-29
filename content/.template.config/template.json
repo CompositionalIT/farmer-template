@@ -12,7 +12,7 @@
         "type": "project"
     },
     "identity": "Farmer.Template",
-    "shortName": "Farmer",
+    "shortName": "farmer",
     "sourceName": "Farmer.Template",
     "symbols": {
         "ci": {
