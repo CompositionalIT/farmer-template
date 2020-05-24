@@ -1,5 +1,4 @@
 open Farmer
-open Farmer.Resources
 open Farmer.Deploy
 open System
 
@@ -9,7 +8,7 @@ open System
 // Add resources to the ARM deployment using the add_resource keyword.
 // See https://compositionalit.github.io/farmer/api-overview/resources/arm/ for more details.
 let deployment = arm {
-    location NorthEurope
+    location Location.NorthEurope
 }
 
 printf "Generating ARM template..."
