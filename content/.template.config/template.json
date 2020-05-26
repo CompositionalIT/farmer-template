@@ -28,12 +28,7 @@
                 {
                     "choice": "devops",
                     "description": "add support for azure devops"
-                },
-                {
-                    "choice": "direct",
-                    "description": "add support for direct deployment through Farmer"
                 }
-
             ]
         },
         "azureSubscription" : {
@@ -81,7 +76,7 @@
                 { "choice" : "WestIndia" }
             ],
             "description": "The location to create the resources in.",
-            "replaces": "NorthEurope",
+            "replaces": "WestEurope",
             "isRequired": false
         }
     },
@@ -100,11 +95,11 @@
                 },
                 {
                     "include": "Program.fs",
-                    "condition": "ci != \"direct\""
+                    "condition": "ci == \"none\""
                 },
                 {
                     "include": "ProgramDeploy.fs",
-                    "condition": "ci == \"direct\"",
+                    "condition": "ci != \"none\"",
                     "rename": { "ProgramDeploy.fs" : "Program.fs" }
                 }
             ]

@@ -1,10 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Description>Farmer Template</Description>
-        <Authors>Isaac Abraham</Authors>
-        <PackageProjectUrl>https://github.com/Farmer/Farmer>template</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Farmer/Farmer-template.git</RepositoryUrl>
+        <Title>Farmer.Template</Title>
+        <Description>Farmer makes repeatable Azure deployments easy!</Description>
+        <Version>0.2.0</Version>
+        <Company>Compositional IT</Company>
+        <Authors>Isaac Abraham and contributors</Authors>
+
+        <PackageId>Farmer.Template</PackageId>
         <PackageTags>template;fsharp;azure;arm</PackageTags>
+        <PackageProjectUrl>https://compositionalit.github.io/farmer/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/CompositionalIT/farmer-template/</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryType>git</RepositoryType>
         <NeutralLanguage>en-US</NeutralLanguage>
         <PackageType>Template</PackageType>
         <NoBuild>true</NoBuild>

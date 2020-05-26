@@ -2,18 +2,13 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Run Farmer'
-  inputs:
-    command: 'run'
-
-- task: AzureResourceGroupDeployment@2
+- task: AzureCLI@2
   displayName: 'Deploy ARM template'
   inputs:
     azureSubscription: '<enter subscription name here>'
-    resourceGroupName: farmer-rg
-    location: NorthEurope
-    csmFile: output.json
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'dotnet run'
