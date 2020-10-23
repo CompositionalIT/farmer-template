@@ -1,6 +1,5 @@
 open Farmer
 open Farmer.Builders
-open Farmer.Deploy
 open System
 
 // Create ARM resources here e.g. webApp { } or storageAccount { } etc.
