@@ -11,19 +11,11 @@ let deployment = arm {
     location Location.WestEurope
 }
 
-module Config =
-    let private getEnv name =
-        match Environment.GetEnvironmentVariable name with
-        | null -> None
-        | name -> Some name
-    let resourceGroupName =
-        getEnv "RESOURCE_GROUP_NAME" |> Option.defaultValue "farmer-ci-deploy"
+let resourceGroupName =
+    match Environment.GetEnvironmentVariable "RESOURCE_GROUP_NAME" with
+    | null -> failwith "Missing RESOURCE_GROUP_NAME environment variable"
+    | value -> value
 
-let response =
-    deployment
-    |> Deploy.tryExecute Config.resourceGroupName Deploy.NoParameters
-    |> function
-    | Ok outputs -> sprintf "Success! Outputs: %A" outputs
-    | Error error -> sprintf "Rejected! %A" error
-
-printfn "Deployment finished with result: %s" response
+deployment
+|> Deploy.execute resourceGroupName Deploy.NoParameters
+|> ignore
